@@ -13,9 +13,8 @@ permissions:
   id-token: write
 
 # 环境配置
-environment:
-  name: github-pages
-  url: ${{ steps.deployment.outputs.page_url }}
+env:
+  ASTRO_TARGET: github-pages
 
 jobs:
   deploy:
