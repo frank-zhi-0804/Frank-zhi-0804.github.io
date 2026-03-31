@@ -1,49 +1,119 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import Footer from '../components/Footer.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关于我 | 阮成智的博客</title>
+  </head>
+  <body>
+    <!-- 保留顶部导航栏 -->
+    <Header />
+
+    <!-- 个人介绍主内容区：占满屏幕剩余空间 -->
+    <main class="fullscreen-profile">
+      <div class="profile-card">
+        <h1>你好，我是阮成智</h1>
+        <p>华中师范大学计算机学院大一学生，热爱编程与前端开发，正在朝着 AI + 全栈工程师的方向努力。</p>
+
+        <h2>关于我</h2>
+        <p>熟悉 C 语言、Vue3、Node.js 等技术，喜欢用代码实现想法，也在学习全栈开发与算法知识。平时会写技术博客、做小项目，享受从 0 到 1 搭建产品的过程。</p>
+
+        <h2>技能方向</h2>
+        <div class="tags">
+          <span class="tag">C / C++</span>
+          <span class="tag">Vue3</span>
+          <span class="tag">HTML / CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Git</span>
+          <span class="tag">Astro</span>
+        </div>
+
+        <h2>小目标</h2>
+        <p>打好计算机基础，提升工程能力，持续输出技术内容，未来成为一名靠谱的全栈开发者。</p>
+      </div>
+    </main>
+
+    <!-- 保留底部页脚 -->
+    <Footer />
+  </body>
 </html>
+
+<style is:global>
+  /* 全局样式重置，适配你的项目 */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* 主容器：占满屏幕剩余高度，垂直居中内容 */
+  .fullscreen-profile {
+    /* 100vh = 屏幕总高度，减去导航栏高度（根据你的Header实际高度微调） */
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+
+  /* 卡片样式：全屏展示，去掉宽度限制 */
+  .profile-card {
+    background: #ffffff;
+    padding: 3rem 4rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 文字样式 */
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+    color: #1a1a1a;
+  }
+  h2 {
+    font-size: 1.4rem;
+    margin: 1.8rem 0 0.8rem;
+    color: #333333;
+  }
+  p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444444;
+    margin-bottom: 1rem;
+  }
+
+  /* 技能标签 */
+  .tags {
+    margin-top: 0.5rem;
+  }
+  .tag {
+    display: inline-block;
+    background: #e9f0ff;
+    color: #0066cc;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin: 4px 6px 4px 0;
+    font-size: 0.95rem;
+  }
+
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+    .profile-card {
+      padding: 2rem 1.5rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
