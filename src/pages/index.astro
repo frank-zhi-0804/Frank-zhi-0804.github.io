@@ -1,117 +1,141 @@
 ---
-
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>关于我 | 阮成智的博客</title>
-  </head>
-  <body>
-    <!-- 保留顶部导航栏 -->
-    <Header />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>关于我 | 阮成智的博客</title>
+</head>
+<body>
 
-    <!-- 个人介绍主内容区：占满屏幕空间 -->
-    <main class="fullscreen-profile">
-      <div class="profile-card">
-        <h1>你好，我是阮成智</h1>
-        <p>华中师范大学计算机学院大一学生，热爱编程与开发，正在朝着 AI + 全栈工程师的方向努力。</p>
+<canvas id="canvas"></canvas>
 
-        <h2>关于我</h2>
-        <p>粗略了解 C 语言、Vue3、Node.js 等技术，喜欢用代码实现想法，也在学习全栈开发与算法知识。平时也享受从 0 到 1 搭建产品的过程。</p>
+<Header />
 
-        <h2>技能方向</h2>
-        <div class="tags">
-          <span class="tag">C / C++</span>
-          <span class="tag">Vue3</span>
-          <span class="tag">HTML / CSS</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">Astro</span>
-        </div>
+<main style="max-width: 700px; margin: 0 auto; padding: 4rem 2rem;">
+  <div>
+    <h1 style="color: #fff;">你好，我是阮成智</h1>
+    <p style="color: #e2e8f0;">华中师范大学计算机学院大一学生，热爱编程与开发，正在朝着 AI + 全栈工程师的方向努力。</p>
 
-        <h2>小目标</h2>
-        <p>打好计算机基础，提升工程能力，持续输出技术内容，未来成为一名靠谱的全栈开发者。</p>
-      </div>
-    </main>
+    <h2 style="color: #fff;">关于我</h2>
+    <p style="color: #e2e8f0;">粗略了解 C 语言、Vue3、Node.js 等技术，喜欢用代码实现想法，也在学习全栈开发与算法知识。平时也享受从 0 到 1 搭建产品的过程。</p>
 
-    <!-- 保留底部页脚 -->
-    <Footer />
-  </body>
-</html>
+    <h2 style="color: #fff;">技能方向</h2>
+    <div style="margin: 1rem 0;">
+      <span style="background: rgba(120,180,255,0.15); color: #93c5fd; padding: 6px 12px; border-radius: 6px; margin: 0 6px 6px 0; display: inline-block;">C / C++</span>
+      <span style="background: rgba(120,180,255,0.15); color: #93c5fd; padding: 6px 12px; border-radius: 6px; margin: 0 6px 6px 0; display: inline-block;">Vue3</span>
+      <span style="background: rgba(120,180,255,0.15); color: #93c5fd; padding: 6px 12px; border-radius: 6px; margin: 0 6px 6px 0; display: inline-block;">HTML / CSS</span>
+      <span style="background: rgba(120,180,255,0.15); color: #93c5fd; padding: 6px 12px; border-radius: 6px; margin: 0 6px 6px 0; display: inline-block;">JavaScript</span>
+      <span style="background: rgba(120,180,255,0.15); color: #93c5fd; padding: 6px 12px; border-radius: 6px; margin: 0 6px 6px 0; display: inline-block;">Astro</span>
+    </div>
 
-<style is:global>
-  /* 全局样式重置，适配你的项目 */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    <h2 style="color: #fff;">小目标</h2>
+    <p style="color: #e2e8f0;">打好计算机基础，提升工程能力，持续输出技术内容，未来成为一名靠谱的全栈开发者。</p>
+  </div>
+</main>
+
+<Footer />
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+let ripples = [];
+let mouse = { x: null, y: null };
+
+window.addEventListener('mousemove', (e) => {
+  mouse.x = e.x;
+  mouse.y = e.y;
+});
+
+window.addEventListener('click', (e) => {
+  ripples.push({ x: e.x, y: e.y, r: 0, opacity: 1 });
+});
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2.5 + 1;
+    this.speedX = Math.random() * 0.5 - 0.25;
+    this.speedY = Math.random() * 0.5 - 0.25;
   }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
 
-  /* 主容器：占满屏幕剩余高度，垂直居中内容 */
-  .fullscreen-profile {
-    /* 100vh = 屏幕总高度，减去导航栏高度（根据你的Header实际高度微调） */
-    min-height: calc(100vh - 64px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f8f9fa;
-    padding: 20px;
-  }
-
-  /* 卡片样式：全屏展示，去掉宽度限制 */
-  .profile-card {
-    background: #ffffff;
-    padding: 3rem 4rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* 文字样式 */
-  h1 {
-    font-size: 2.2rem;
-    margin-bottom: 1.2rem;
-    color: #1a1a1a;
-  }
-  h2 {
-    font-size: 1.4rem;
-    margin: 1.8rem 0 0.8rem;
-    color: #333333;
-  }
-  p {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #444444;
-    margin-bottom: 1rem;
-  }
-
-  /* 技能标签 */
-  .tags {
-    margin-top: 0.5rem;
-  }
-  .tag {
-    display: inline-block;
-    background: #e9f0ff;
-    color: #0066cc;
-    padding: 6px 12px;
-    border-radius: 6px;
-    margin: 4px 6px 4px 0;
-    font-size: 0.95rem;
-  }
-
-  /* 移动端适配 */
-  @media (max-width: 768px) {
-    .profile-card {
-      padding: 2rem 1.5rem;
-    }
-    h1 {
-      font-size: 1.8rem;
+    const dx = this.x - mouse.x;
+    const dy = this.y - mouse.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist < 120) {
+      this.x -= dx * 0.02;
+      this.y -= dy * 0.02;
     }
   }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(120, 180, 255, 0.65)';
+    ctx.fill();
+  }
+}
+
+function init() {
+  particles = [];
+  for (let i = 0; i < 200; i++) particles.push(new Particle());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  ripples.forEach((r, i) => {
+    r.r += 1.2;
+    r.opacity -= 0.015;
+    if (r.opacity <= 0) ripples.splice(i, 1);
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(120, 180, 255, ${r.opacity})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+  requestAnimationFrame(animate);
+}
+
+init();
+animate();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+});
+</script>
+
+<style>
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  margin: 0;
+  padding: 0;
+}
+
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+}
 </style>
+
+</body>
+</html>
