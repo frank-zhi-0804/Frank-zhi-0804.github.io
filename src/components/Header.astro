@@ -1,8 +1,11 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import ThemeToggle from './ThemeToggle.vue';
+import TopParticles from './TopParticles.vue';
 ---
 
+<TopParticles />
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
@@ -39,6 +42,7 @@ import HeaderLink from './HeaderLink.astro';
 					></path></svg
 				>
 			</a>
+			<ThemeToggle client:load />
 		</div>
 	</nav>
 </header>
@@ -81,5 +85,16 @@ import HeaderLink from './HeaderLink.astro';
 		.social-links {
 			display: none;
 		}
+	}
+</style>
+<style is:global>
+	html.dark header {
+		background: #1a1d23;
+	}
+	html.dark nav a {
+		color: rgb(var(--black));
+	}
+	html.dark h2 a {
+		color: rgb(var(--black));
 	}
 </style>

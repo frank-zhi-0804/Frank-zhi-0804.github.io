@@ -22,3 +22,8 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 		text-decoration: underline;
 	}
 </style>
+<style is:global>
+	html.dark a {
+		color: rgb(var(--black));
+	}
+</style>
