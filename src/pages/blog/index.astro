@@ -104,6 +104,40 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main>
+			 <section>
+                                <input
+                                        type="text"
+                                        id="search-input"
+                                        placeholder="搜索文章标题..."
+                                        style="width: 100%; padding: 10px; margin-bottom: 20px; font-size: 16px;"
+                                />
+                                 
+                </section>
+            <script>
+				                  // 1. 找到页面上的【搜索输入框】，存起来
+                                const input = document.getElementById('search-input');
+								// 2. 找到页面上【所有的博客文章】（每一篇文章都是一个 li 标签），存起来
+                                const posts = document.querySelectorAll('ul li');
+                                 // 3. 给搜索框加一个「监听事件」：只要用户打字，就立刻执行后面的逻辑
+                                input.addEventListener('input', (e) => {
+									// 4. 获取用户输入的文字，并且转成小写（不区分大小写搜索）
+                                        const keyword = e.target.value.toLowerCase();
+                                         // 5. 循环遍历【每一篇博客文章】
+                                        posts.forEach(post => {
+											// 6. 找到当前这篇文章的【标题】，转成小写
+                                                const title = post.querySelector('.title').textContent.toLowerCase();
+												 // 7. 判断：文章标题 是否包含 用户输入的关键词
+                                                if (title.includes(keyword)) {
+													// 包含 → 显示这篇文章
+                                                        post.style.display = 'block';
+                                                } else {
+													// 不包含 → 隐藏这篇文章
+                                                        post.style.display = 'none';
+                                                }
+                                        });
+                                });
+            </script>
+
 			<section>
 				<ul>
 					{

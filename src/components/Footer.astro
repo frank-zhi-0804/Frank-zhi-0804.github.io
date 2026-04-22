@@ -1,7 +1,8 @@
 ---
 const today = new Date();
 ---
-
+<!-- 回到顶部按钮 -->
+<button id="back-to-top" title="回到顶部">↑</button>
 <footer>
 	&copy; {today.getFullYear()} Your name here. All rights reserved.
 	<div class="social-links">
@@ -39,6 +40,23 @@ const today = new Date();
 		</a>
 	</div>
 </footer>
+
+<script>
+	const btn = document.getElementById('back-to-top');
+
+	window.addEventListener('scroll', () => {
+		if (window.scrollY > window.innerHeight) {
+			btn.classList.add('show');
+		} else {
+			btn.classList.remove('show');
+		}
+	});
+
+	btn.addEventListener('click', () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	});
+</script>
+
 <style>
 	footer {
 		padding: 2em 1em 6em 1em;
@@ -59,6 +77,28 @@ const today = new Date();
 	.social-links a:hover {
 		color: rgb(var(--gray-dark));
 	}
+	#back-to-top {
+	position: fixed;
+	bottom: 10px;
+	right: 30px;
+	width: 80px;
+	height: 50px;
+	border-radius: 50%;
+	border: none;
+	background: black;
+	color: white;
+	font-size: 24px;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.3s, transform 0.3s;
+	z-index: 1000;
+}
+#back-to-top.show {
+	opacity: 1;
+}
+#back-to-top:hover {
+	transform: scale(1.1);
+}
 </style>
 <style is:global>
 	html.dark footer {
