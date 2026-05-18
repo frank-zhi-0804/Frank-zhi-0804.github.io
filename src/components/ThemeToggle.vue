@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const isDark = ref(false)
 
@@ -71,20 +71,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
-  color: rgb(var(--black));
+  transition: all 0.2s;
+  color: var(--text-secondary);
 }
 
 .theme-toggle:hover {
-  background-color: rgb(var(--gray-light));
-}
-
-.dark .theme-toggle {
-  color: #fff;
-}
-
-.dark .theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .icon {
