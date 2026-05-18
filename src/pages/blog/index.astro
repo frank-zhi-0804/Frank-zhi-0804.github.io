@@ -5,159 +5,187 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-		<style is:global>
-			html.dark .title {
-				color: rgb(var(--black));
-			}
-			html.dark .date {
-				color: rgb(var(--gray));
-			}
-			html.dark ul li a:hover h4,
-			html.dark ul li a:hover .date {
-				color: var(--accent);
-			}
-			html.dark main {
-				background: transparent;
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			 <section>
-                                <input
-                                        type="text"
-                                        id="search-input"
-                                        placeholder="搜索文章标题..."
-                                        style="width: 100%; padding: 10px; margin-bottom: 20px; font-size: 16px;"
-                                />
-                                 
-                </section>
-            <script>
-				                  // 1. 找到页面上的【搜索输入框】，存起来
-                                const input = document.getElementById('search-input');
-								// 2. 找到页面上【所有的博客文章】（每一篇文章都是一个 li 标签），存起来
-                                const posts = document.querySelectorAll('ul li');
-                                 // 3. 给搜索框加一个「监听事件」：只要用户打字，就立刻执行后面的逻辑
-                                input.addEventListener('input', (e) => {
-									// 4. 获取用户输入的文字，并且转成小写（不区分大小写搜索）
-                                        const keyword = e.target.value.toLowerCase();
-                                         // 5. 循环遍历【每一篇博客文章】
-                                        posts.forEach(post => {
-											// 6. 找到当前这篇文章的【标题】，转成小写
-                                                const title = post.querySelector('.title').textContent.toLowerCase();
-												 // 7. 判断：文章标题 是否包含 用户输入的关键词
-                                                if (title.includes(keyword)) {
-													// 包含 → 显示这篇文章
-                                                        post.style.display = 'block';
-                                                } else {
-													// 不包含 → 隐藏这篇文章
-                                                        post.style.display = 'none';
-                                                }
-                                        });
-                                });
-            </script>
+<html lang="zh-CN">
+<head>
+  <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  <style>
+    main {
+      max-width: var(--wide-width);
+      padding: var(--spacing-2xl) var(--spacing-lg);
+    }
 
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+    .search-container {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--spacing-md);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--card-bg);
+      color: var(--text-primary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .post-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      background: var(--card-bg);
+    }
+
+    .post-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--card-shadow);
+      transform: translateY(-2px);
+    }
+
+    .post-card a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .post-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .post-card-content {
+      padding: var(--spacing-lg);
+    }
+
+    .post-card .title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .post-card .date {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .post-card .excerpt {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: var(--spacing-sm) 0 0 0;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: var(--spacing-3xl);
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .no-results.visible {
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <Header />
+  <main>
+    <div class="search-container">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="搜索文章标题..."
+      />
+    </div>
+
+    <div class="posts-grid" id="posts-grid">
+      {posts.map(post => (
+        <article class="post-card" data-title={post.data.title.toLowerCase()}>
+          <a href={`/blog/${post.id}/`}>
+            {post.data.heroImage && (
+              <Image width={600} height={300} src={post.data.heroImage} alt="" />
+            )}
+            <div class="post-card-content">
+              <h3 class="title">{post.data.title}</h3>
+              <p class="date"><FormattedDate date={post.data.pubDate} /></p>
+              {post.data.description && (
+                <p class="excerpt">{post.data.description}</p>
+              )}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <div id="no-results" class="no-results">
+      <p>没有找到相关文章</p>
+    </div>
+  </main>
+  <Footer />
+
+  <script>
+    const input = document.getElementById('search-input');
+    const posts = document.querySelectorAll('.post-card');
+    const noResults = document.getElementById('no-results');
+
+    input.addEventListener('input', (e) => {
+      const keyword = e.target.value.toLowerCase();
+      let visibleCount = 0;
+
+      posts.forEach(post => {
+        const title = post.getAttribute('data-title');
+        if (title.includes(keyword)) {
+          post.style.display = 'block';
+          visibleCount++;
+        } else {
+          post.style.display = 'none';
+        }
+      });
+
+      if (noResults) {
+        noResults.classList.toggle('visible', visibleCount === 0 && keyword.length > 0);
+      }
+    });
+  </script>
+</body>
 </html>
